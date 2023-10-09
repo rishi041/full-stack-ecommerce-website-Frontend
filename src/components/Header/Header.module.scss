@@ -1,0 +1,8 @@
+.header {
+  @apply text-orange-600;
+  .inside {
+    width: 50px;
+    color: red;
+    background-color: greenyellow;
+  }
+}
