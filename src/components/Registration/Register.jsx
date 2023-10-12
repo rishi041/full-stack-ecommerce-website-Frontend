@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import { getUsers, addNewUserToDB } from "../../services/userService";
 import { Link, Navigate, useLocation } from "react-router-dom";
 
 const Register = () => {
@@ -13,9 +13,31 @@ const Register = () => {
   const password = useRef({});
   password.current = watch("password", "");
 
-  const onSubmit = (data) => {
-    console.log(data, "data");
+  const onSubmit = async (data) => {
+    let payload = {
+      username: data.username,
+      fullname: data.fullname,
+      email: data.email,
+      password: data.password,
+    };
+    console.log(payload, "data");
+
+    await addNewUserToDB(payload).then((response1) => {
+      console.log(response1);
+    });
   };
+
+  useEffect(() => {
+    async function data() {
+      await getUsers().then((res) => {
+        if (res?.data?.length > 0) {
+          console.log(res.data, "getUsers");
+        }
+      });
+    }
+
+    data();
+  }, []);
 
   return (
     <div title="Create account">
@@ -52,12 +74,12 @@ const Register = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="text"
-              name="name"
-              {...register("name", {
-                required: "Name cannot be empty",
+              name="fullname"
+              {...register("fullname", {
+                required: "Fullname cannot be empty",
                 minLength: {
                   value: 6,
-                  message: "Name must be greater than 5 characters",
+                  message: "Fullname must be greater than 5 characters",
                 },
               })}
             />
