@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getUsers, addNewUserToDB } from "../../services/userService";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const {
@@ -12,6 +12,7 @@ const Register = () => {
   } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     let payload = {
@@ -20,10 +21,14 @@ const Register = () => {
       email: data.email,
       password: data.password,
     };
-    console.log(payload, "data");
 
-    await addNewUserToDB(payload).then((response1) => {
-      console.log(response1);
+    await addNewUserToDB(payload).then((res) => {
+      console.log(res, "addNewUserToDB");
+      if (res.status === 200) {
+        navigate("/login");
+      } else {
+        alert("Error");
+      }
     });
   };
 

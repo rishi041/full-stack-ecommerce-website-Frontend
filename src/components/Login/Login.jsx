@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { userAuthentication } from "../../services/userAuthentication";
 
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const {
@@ -14,9 +15,23 @@ const Login = () => {
       password: "",
     },
   });
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log(data, "data");
+    let payload = {
+      email: data.email,
+      password: data.password,
+    };
+
+    await userAuthentication(payload).then((res) => {
+      console.log(res, "userAuthentication");
+      if (res.data.Status === "Success") {
+
+        navigate("/");
+      } else {
+        alert("Error");
+      }
+    });
   };
 
   return (
