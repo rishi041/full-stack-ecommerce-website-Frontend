@@ -12,6 +12,7 @@ import Login from "./components/Login/Login";
 import Register from "./components/Registration/Register";
 import Cart from "./components/Cart/Cart";
 import Navbar from "./components/Navbar/Navbar";
+import VerifyToken from "./components/VerifyToken/VerifyToken";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,12 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    children: [
+      {
+        path: "/login/profile",
+        element: <VerifyToken />,
+      },
+    ],
   },
   {
     path: "/signup",

@@ -1,8 +1,9 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { userAuthentication } from "../../services/userAuthentication";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const {
@@ -26,8 +27,8 @@ const Login = () => {
     await userAuthentication(payload).then((res) => {
       console.log(res, "userAuthentication");
       if (res.data.Status === "Success") {
-
-        navigate("/");
+        Cookies.set("token", res.data.token, { expires: 1 / 288 });
+        navigate("/login/profile");
       } else {
         alert("Error");
       }
@@ -91,6 +92,7 @@ const Login = () => {
           </p>
         </form>
       </div>
+      <Outlet />
     </div>
   );
 };
